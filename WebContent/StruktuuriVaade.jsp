@@ -16,13 +16,13 @@
 <script src="./jquery.treeview.async.js" type="text/javascript"></script>
 <script type="text/javascript">
 </script>
-		<title>Admin üksus!</title>
+		<title>Yksuste Struktuuri Vaade!</title>
 	</head>
 	<body>	
  <div id="sisu">
   	<div id="vorm">
       
-		 <u>&#187;Admin üksuse liigi struktuur</u><p>
+		 
 		 <c:set var="i" value="1"/>
 			<c:forEach var="liik" items="${liigid}">
 				<c:forEach var="num" begin="0" end="${liik.alluv_id}" step="1">

@@ -6,13 +6,13 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link rel="stylesheet" type="text/css" href="style.css">
-		<title>Admin üksus!</title>
+		<title>Admin Alluvus Raport</title>
 	</head>
 	<body>	
  <div id="sisu">
    <div id="vorm">
 
-		 <p><u>&#187; V3 - Admin üksuste alluvusraport</u>
+		
 		 <form method='POST' action='' accept-charset="UTF-8">
 		 <table width="300px">
 		 	<tr>
