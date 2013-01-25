@@ -15,7 +15,7 @@ public class Main extends HttpServlet {
 
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
-			request.getRequestDispatcher("Screen.jsp").forward(request, response);
+			request.getRequestDispatcher("Index.jsp").forward(request, response);
 		}
 
 
