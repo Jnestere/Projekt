@@ -1,0 +1,46 @@
+table {
+	border-collapse: collapse;
+}
+
+table td {
+	padding: 3px;
+}
+
+table div {
+	float: left;
+}
+
+table div+div {
+	float: right;
+	overflow: hidden;
+}
+
+table.borderedTable {
+	position: absolute;
+	top: 0px;
+	width: 100%;	
+}
+
+.allBorders {
+	border: 1px solid #CCCCCC;
+}
+
+body {
+	font-size: 14px;
+}
+
+body, input, select, textarea, button {
+	font-family: "Arial", cursive;
+}
+
+
+
+.Title, .withMargin {
+	margin-left: 10px;
+}
+
+.Title {
+	color:  #6F73D;
+	font-weight: bolder;
+	font-size: 24px;
+}
