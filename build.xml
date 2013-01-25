@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="JEE-PiiriValve" default="compile">
-	<property name="team.name" value="Team02d" />
-	<property name="project.name" value="JEE-PiiriValve" />
+<project name="Projekt" default="compile">
+	<property name="team.name" value="Team01d" />
+	<property name="project.name" value="Projekt" />
 	<property name="project.dir" value="${basedir}" />
 
 	<property name="src.dir" value="${project.dir}/src" />
