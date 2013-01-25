@@ -66,13 +66,13 @@
   </servlet-mapping>
   <servlet>
       <description></description>
-    <display-name>LisaVoimalikAlluv</display-name>
-    <servlet-name>LisaVoimalikAlluv</servlet-name>
-    <servlet-class>pages.LisaVoimalikAlluv</servlet-class>
+    <display-name>LisaAdminLiik</display-name>
+    <servlet-name>LisaAdminLiik</servlet-name>
+    <servlet-class>adding.LisaAdminLiik</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>LisaVoimalikAlluv</servlet-name>
-    <url-pattern>/LisaVoimalikAlluv</url-pattern>
+    <servlet-name>LisaAdminLiik</servlet-name>
+    <url-pattern>/LisaAdminLiik</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
