@@ -6,9 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import base.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ public class AdminYksuseRedaktor extends HttpServlet {
 		List<RiigiAdminYksus> alluvused = null;
 		List<RiigiAdminYksus> ylemused = null;
 		List<RiigiAdminYksus> liigid = null;
+		List<RiigiAdminYksus> yksus = null;
 		
 		int ID = 1;
 		if (request.getParameter("ID") != null) {
@@ -53,7 +56,7 @@ public class AdminYksuseRedaktor extends HttpServlet {
 		request.setAttribute("yksused", yksused);
 
 		try {
-			liigid = naitaLiike(ID);
+			liigid = naitaLiike();
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
@@ -82,68 +85,70 @@ public class AdminYksuseRedaktor extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		Connection conn = null;
-		PreparedStatement ps = null;
-		request.setCharacterEncoding("UTF-8");
-		if (request.getParameter("alluv") != null) {
-			int alluv = Integer.parseInt(request.getParameter("alluv"));
-			int ylemus = Integer.parseInt(request.getParameter("ylemus"));
+			
+		HttpServletResponse response) throws ServletException, IOException {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			request.setCharacterEncoding("UTF-8");
+			if (request.getParameter("alluv") != null) {
+				int alluv = Integer.parseInt(request.getParameter("alluv"));
+				int ylemus = Integer.parseInt(request.getParameter("ylemus"));
 
+				
+				
+				try {
+					conn = DriverManager
+							.getConnection("jdbc:hsqldb:file:${user.home}/i377/Team01d/db;shutdown=true");
+										
+				  ps = conn.prepareStatement("delete from ADMIN_ALLUV "
+							+ "where admin_alluvus_id = ? "
+							+ "AND  alluv_yksus_id = ? ");
+				 ps.setInt(1, ylemus);
+				 ps.setInt(2, alluv);
+				 
+				 int rowCount = ps.executeUpdate();
+				 System.out.println(rowCount + " rows deleted!");
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				} finally {
+				 DbUtils.closeQuietly(ps);
+				 DbUtils.closeQuietly(conn);
+				 }
+				String redirectURL = "AdminYksuseRedaktor?ID=" + ylemus;
+			    response.sendRedirect(redirectURL);
 			
-			
-			try {
-				conn = DriverManager
-						.getConnection("jdbc:hsqldb:file:${user.home}/i377/Team01d/db;shutdown=true");
-									
-			  ps = conn.prepareStatement("delete from ADMIN_ALLUV "
-						+ "where ylemus_yksus_ID = ? "
-						+ "AND alluv_yksus_ID = ?");
-			 ps.setInt(1, ylemus);
-			 ps.setInt(2, alluv);
-			 
-			 int rowCount = ps.executeUpdate();
-			 System.out.println(rowCount + " rows updated!");
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			} finally {
-			 DbUtils.closeQuietly(ps);
-			 DbUtils.closeQuietly(conn);
-			 }
-			String redirectURL = "AdminLiigiRedaktor?ID=" + ylemus;
-		    response.sendRedirect(redirectURL);
-		
-		} else {
-			
-			int riigiID = Integer.parseInt(request.getParameter("riigi_admin_yksus_id"));
-			String kood = request.getParameter("kood");
-			String nimetus = request.getParameter("nimetus");
-			String komentaar = request.getParameter("komentaar");
-			try {
-				conn = DriverManager.getConnection(connectionString);
+			} else {
+				
+				int riigiID = Integer.parseInt(request.getParameter("riigi_admin_yksus_id"));
+				String kood = request.getParameter("kood");
+				String nimetus = request.getParameter("nimetus");
+				String kommentaar = request.getParameter("kommentaar");
+				try {
+					conn = DriverManager.getConnection(connectionString);
 
-				ps = conn.prepareStatement("update RIIGI_ADMIN_YKSUS "
-						+ "set kood = ?, " + "nimetus = ?, "
-						+ "komentaar = ?, " + "muutuja = ?, "
-						+ "muudetud = TODAY "
-						+ "where riigi_admin_yksyse_liik_id = ?");
-				ps.setString(1, kood);
-				ps.setString(2, nimetus);
-				ps.setString(3, komentaar);
-				ps.setString(4, "ADMIN");
-				ps.setInt(5, riigiID);
-				ps.executeUpdate();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			} finally {
-				DbUtils.closeQuietly(ps);
-				DbUtils.closeQuietly(conn);
+					ps = conn.prepareStatement("update RIIGI_ADMIN_YKSUS "
+							+ "set kood = ?, " + "nimetus = ?, "
+							+ "komentaar = ?, " + "muutuja = ?, "
+							+ "muudetud = TODAY "
+							+ "where riigi_admin_yksus_id = ?");
+					ps.setString(1, kood);
+					ps.setString(2, nimetus);
+					ps.setString(3, kommentaar);
+					ps.setString(4, "ADMIN");
+					ps.setInt(5, riigiID);
+					ps.executeUpdate();
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				} finally {
+					DbUtils.closeQuietly(ps);
+					DbUtils.closeQuietly(conn);
+				}
+				String redirectURL = "Main?ID=" + riigiID;
+				response.sendRedirect(redirectURL);
 			}
-			String redirectURL = "Main?ID=" + riigiID;
-			response.sendRedirect(redirectURL);
 		}
-	}
-
+	
+	
 	private List<RiigiAdminYksus> naitaYksuseLiike(int ID)
 			throws SQLException {
 
@@ -216,35 +221,35 @@ public class AdminYksuseRedaktor extends HttpServlet {
 		return alluvused;
 	}
 
-	private List<RiigiAdminYksus> naitaLiike(int ID) throws SQLException {
+	private List<RiigiAdminYksus> naitaLiike() throws SQLException {
 
 		List<RiigiAdminYksus> naitaLiike = new ArrayList<RiigiAdminYksus>();
 		Connection conn = DriverManager.getConnection(connectionString);
 
+		Statement stmt = null;
 		ResultSet rset = null;
-		PreparedStatement ps = null;
 		try {
-			ps = conn
-					.prepareStatement("select riigi_admin_yksus_id ,nimetus "
-							+ "from RIIGI_ADMIN_YKSUS ");
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery("select * "
+							+ "from RIIGI_ADMIN_YKSUS where suletud is not null ");
 			//ps.setInt(1, ID);
-			rset = ps.executeQuery();
-			RiigiAdminYksus RiigiAdminYksus = new RiigiAdminYksus();
 			while (rset.next()) {
+			RiigiAdminYksus RiigiAdminYksus = new RiigiAdminYksus();
+			
 				RiigiAdminYksus.setRiigi_admin_yksuse_liik_id(rset.getInt(1));
-				RiigiAdminYksus.setNimetus(rset.getString(1));
+				RiigiAdminYksus.setNimetus(rset.getString(2));
 				naitaLiike.add(RiigiAdminYksus);
 			}
+			return naitaLiike;
+		
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
 			DbUtils.closeQuietly(rset);
-			DbUtils.closeQuietly(ps);
-	
+			DbUtils.closeQuietly(stmt);
 			DbUtils.closeQuietly(conn);
 		}
-		return naitaLiike;
-	}
+	}		
 
 	
 	private List<RiigiAdminYksus> naitaYlemusi(int ID) throws SQLException {
@@ -281,4 +286,52 @@ public class AdminYksuseRedaktor extends HttpServlet {
 		}
 		return ylemused;
 	}
+	private List<RiigiAdminYksus> uuendaYksus(int riigi_admin_yksyse_liik_id) throws SQLException {
+		
+		List<RiigiAdminYksus> yksused = new ArrayList<RiigiAdminYksus>();
+		
+		Connection conn = DriverManager
+				.getConnection("jdbc:hsqldb:file:${user.home}/i377/Team01d/db;shutdown=true");
+
+		PreparedStatement ps = null;
+		ResultSet rset = null;
+		try {
+			ps = conn.prepareStatement("select * from RIIGI_ADMIN_YKSUS "
+					+ "where suletud is not null AND "
+					+ "riigi_admin_yksyse_liik_id = ?");
+			ps.setInt(1, riigi_admin_yksyse_liik_id);
+			rset = ps.executeQuery();
+			
+			while (rset.next()) {
+				RiigiAdminYksus yksus = new RiigiAdminYksus();
+				yksus.setRiigi_admin_yksus_id(rset.getInt(1));
+				yksus.setKood(rset.getString(2));
+				yksus.setNimetus(rset.getString(3));
+				yksus.setKommentaar(rset.getString(4));
+				yksus.setRiigi_admin_yksuse_liik_id(rset.getInt(5));
+				yksus.setAlates(rset.getDate(6));
+				yksus.setKuni(rset.getDate(7));
+				yksus.setAvaja(rset.getString(8));
+				yksus.setAvatud(rset.getDate(9));
+				yksus.setMuutja(rset.getString(10));
+				yksus.setMuudetud(rset.getDate(11));
+				yksus.setSulgeja(rset.getString(12));
+				yksus.setSuletud(rset.getDate(13));
+				
+				
+				
+				
+				yksused.add(yksus);
+			}
+
+			return yksused;
+			
+		} finally {
+			DbUtils.closeQuietly(rset);
+			DbUtils.closeQuietly(ps);
+			DbUtils.closeQuietly(conn);
+		}
+}
+
+
 }

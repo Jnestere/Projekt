@@ -58,7 +58,7 @@
     <description></description>
     <display-name>LisaAdminAlluv</display-name>
     <servlet-name>LisaAdminAlluv</servlet-name>
-    <servlet-class>pages.LisaAdminAlluv</servlet-class>
+    <servlet-class>adding.LisaAdminAlluv</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LisaAdminAlluv</servlet-name>

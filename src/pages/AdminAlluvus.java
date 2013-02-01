@@ -7,7 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import base.*;
 import javax.servlet.ServletException;
@@ -28,6 +31,15 @@ public class AdminAlluvus extends HttpServlet {
 
        
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 String kuupaev = request.getParameter("kuupaev");
+	      
+
+	        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	        Date dKp = new Date();
+	        if (kuupaev == null) {
+	            kuupaev = dateFormat.format(dKp);
+	        }
+	        request.setAttribute("kuupaev", kuupaev);
 		if(request.getParameter("liik") !=null) {
 			int liik = Integer.parseInt(request.getParameter("liik"));
 		

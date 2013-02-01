@@ -49,15 +49,17 @@
 				</td>
 				<td>
 					<select name='liik'>
-					<c:forEach var="liik" items="${liigid}">
-					 	<option value="<c:out value='${liik.riigi_admin_yksus_id}' />">
-					  		<c:out value="${liik.nimetus}" />
-					  		</option>
-					  		</c:forEach>
-					  	
+						<c:forEach var="liik" items="${liigid}">
+						 	<option value="<c:out value='${liik.riigi_admin_yksus_id}' />">
+						  		<c:out value="${liik.nimetus}" />
+						  	</option>
+						</c:forEach>
 					</select>
 				</td>
-			</tr>
+				<td>
+					<input type="submit" value="Muuda">
+				</td>
+				
 			<tr>
 				<td>Allub</td>
 											<td><select name='ylemused'>
@@ -67,7 +69,7 @@
 														</option>
 													</c:forEach>
 											</select></td>
-				</td>
+				
 			</tr>
 		</table>
 	<input type="hidden" name="riigi_admin_yksus_id" value="<c:out value='${yksus.riigi_admin_yksus_id}' />">
@@ -96,6 +98,7 @@
 		<input type="hidden" name="alluv" value="<c:out value='${alluvus.riigi_admin_yksus_id}' />">
 		<input type="hidden" name="ylemus" value="<c:out value='${yksus.riigi_admin_yksus_id}' />">
 		<input type='submit' value='eemalda'></td>
+													
 	</tr>
 	</c:forEach>
 	<tr>

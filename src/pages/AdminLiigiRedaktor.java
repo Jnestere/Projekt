@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import base.*;
+import adding.LisaAdminLiik;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -87,13 +88,13 @@ public class AdminLiigiRedaktor extends HttpServlet {
 						.getConnection("jdbc:hsqldb:file:${user.home}/i377/Team01d/db;shutdown=true");
 									
 			  ps = conn.prepareStatement("delete from VOIMALIK_ALLUVUS "
-						+ "where riigi_admin_yksuse_lik = ? "
-						+ "AND voimalik_alluv_lik_id = ?");
+						+ "where riigi_admin_yksuse_lik  = ? "
+						+ "AND  voimalik_alluv_lik_id = ? ");
 			 ps.setInt(1, ylemus);
 			 ps.setInt(2, alluv);
 			 
 			 int rowCount = ps.executeUpdate();
-			 System.out.println(rowCount + " rows updated!");
+			 System.out.println(rowCount + " rows deleted!");
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			} finally {
@@ -104,6 +105,35 @@ public class AdminLiigiRedaktor extends HttpServlet {
 		    response.sendRedirect(redirectURL);
 		
 		} else {
+			if (request.getParameter("liik") != null) {
+				
+				int alluv = Integer.parseInt(request.getParameter("alluv"));
+				int ylemus = Integer.parseInt(request.getParameter("ylemus"));
+
+				
+				
+				try {
+					conn = DriverManager
+							.getConnection("jdbc:hsqldb:file:${user.home}/i377/Team01d/db;shutdown=true");
+										
+				  ps = conn.prepareStatement("delete from VOIMALIK_ALLUVUS "
+							+ "where riigi_admin_yksuse_lik  = ? "
+							+ "AND  voimalik_alluv_lik_id = ? ");
+				 ps.setInt(1, ylemus);
+				 ps.setInt(2, alluv);
+				 
+				 int rowCount = ps.executeUpdate();
+				 System.out.println(rowCount + " rows deleted!");
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				} finally {
+				 DbUtils.closeQuietly(ps);
+				 DbUtils.closeQuietly(conn);
+				 }
+				String redirectURL = "AdminLiigiRedaktor?ID=" + ylemus;
+			    response.sendRedirect(redirectURL);
+			}
+			else{
 			
 			int riigiID = Integer.parseInt(request.getParameter("riigi_admin_yksuse_lik_id"));
 			String kood = request.getParameter("kood");
@@ -131,6 +161,7 @@ public class AdminLiigiRedaktor extends HttpServlet {
 			}
 			String redirectURL = "Main?ID=" + riigiID;
 			response.sendRedirect(redirectURL);
+			}
 		}
 	}
 

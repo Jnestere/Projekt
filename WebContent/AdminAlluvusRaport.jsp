@@ -27,7 +27,7 @@
 		 		</td>
 		 	</tr>
 		 	<tr>
-		 		<td><input type="text" name="kuupaev" value="" /></td>
+		 		                    <td><input type="date" name="kuupaev" value="<%= request.getAttribute("kuupaev")%>" />
 		 		<td>
 					<select name='liik'>
 						<c:forEach var="liik" items="${liigid}">
@@ -55,7 +55,7 @@
 				<input type="hidden" name="alluv" value="<c:out value='${yksus.riigi_admin_yksuse_liik_id}' />"><c:out value="${yksus.nimetus}" />
 </td>
 <td align = 'right'>
-<input type="button" value="Vaata" onclick='window.location = "AdminYksuseRedaktor?id=<c:out value='${yksus.riigi_admin_yksuse_liik_id}' />"'>
+<input type="button" value="Vaata" onclick='window.location = "AdminYksuseRedaktor?ID=<c:out value='${yksus.riigi_admin_yksus_id}' />"'>
 				
 				</td>				
 			
